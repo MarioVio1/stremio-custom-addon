@@ -1,36 +1,35 @@
-# Stremio Custom Addon
+# Stremio Search Addon
 
-Questo è un addon per Stremio che ti permette di configurare i tuoi siti di streaming tramite una pagina web.
+Addon per Stremio che cerca automaticamente film/serie in una lista di siti (simile a Veezie/MammaMia).
 
-## Come si usa
+## Come funziona
 
-1. Clona il repository e installa le dipendenze:
+- Recupera il titolo del contenuto da IMDb
+- Legge la lista di siti da: https://pastebin.com/raw/KgQ4jTy6
+- Cerca il titolo nei siti (uso base di scraping)
+- Mostra i risultati cliccabili su Stremio
+
+## Come usarlo
+
+1. Clona e installa:
    ```bash
    npm install
    ```
 
-2. Avvia il server:
+2. Avvia:
    ```bash
    npm start
    ```
 
-3. Vai su `http://localhost:7000` per vedere la pagina web.
-
-4. Inserisci i tuoi siti con pattern tipo:
-   ```
-   https://ilmiosito.to/watch/{imdb_id}
-   ```
-
-5. Aggiungi l'addon a Stremio usando questo URL:
+3. Aggiungi addon a Stremio:
    ```
    http://localhost:7000/manifest.json
    ```
 
-## Deploy su Render
+---
 
-1. Carica su GitHub.
-2. Crea un Web Service su Render.
-3. Usa `npm install` come build command.
-4. Usa `npm start` come start command.
-
-Fatto! 🎬
+Lista di siti nel formato:
+```
+https://ilmiosito.to/search?q={query}
+https://altronsito.com/find/{query}
+```
