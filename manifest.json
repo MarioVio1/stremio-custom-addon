@@ -5,17 +5,5 @@
   "description": "Cerca automaticamente film e serie nei siti personalizzati",
   "types": ["movie", "series"],
   "resources": ["stream"],
-  "idPrefixes": ["tt"],
-  "catalogs": [
-    {
-      "type": "movie",
-      "id": "movies",
-      "name": "Movies"
-    },
-    {
-      "type": "series",
-      "id": "series",
-      "name": "Series"
-    }
-  ]
+  "idPrefixes": ["tt"]
 }
