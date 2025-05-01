@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Siti Streaming</title>
+</head>
+<body>
+    <h1>Siti di Streaming Personalizzati</h1>
+    <form id="siteForm">
+        <input type="text" id="name" placeholder="Nome del sito" required>
+        <input type="text" id="urlPattern" placeholder="URL con {imdb_id}" required>
+        <button type="submit">Aggiungi</button>
+    </form>
+    <ul id="siteList"></ul>
+
+    <script>
+        async function fetchSites() {
+            const res = await fetch('/api/sites');
+            const sites = await res.json();
+            const list = document.getElementById('siteList');
+            list.innerHTML = '';
+            sites.forEach((site, i) => {
+                const li = document.createElement('li');
+                li.textContent = `${site.name} - ${site.urlPattern}`;
+                const del = document.createElement('button');
+                del.textContent = 'X';
+                del.onclick = async () => {
+                    await fetch('/api/sites/' + i, { method: 'DELETE' });
+                    fetchSites();
+                };
+                li.appendChild(del);
+                list.appendChild(li);
+            });
+        }
+
+        document.getElementById('siteForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const urlPattern = document.getElementById('urlPattern').value;
+            await fetch('/api/sites', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, urlPattern })
+            });
+            e.target.reset();
+            fetchSites();
+        };
+
+        fetchSites();
+    </script>
+</body>
+</html>
