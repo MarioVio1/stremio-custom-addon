@@ -3,50 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestione Siti Streaming</title>
-</head>
-<body>
-    <h1>Siti di Streaming Personalizzati</h1>
-    <form id="siteForm">
-        <input type="text" id="name" placeholder="Nome del sito" required>
-        <input type="text" id="urlPattern" placeholder="URL con {imdb_id}" required>
-        <button type="submit">Aggiungi</button>
-    </form>
-    <ul id="siteList"></ul>
-
     <script>
-        async function fetchSites() {
+        async function caricaSiti() {
             const res = await fetch('/api/sites');
-            const sites = await res.json();
-            const list = document.getElementById('siteList');
-            list.innerHTML = '';
-            sites.forEach((site, i) => {
-                const li = document.createElement('li');
-                li.textContent = `${site.name} - ${site.urlPattern}`;
-                const del = document.createElement('button');
-                del.textContent = 'X';
-                del.onclick = async () => {
-                    await fetch('/api/sites/' + i, { method: 'DELETE' });
-                    fetchSites();
-                };
-                li.appendChild(del);
-                list.appendChild(li);
-            });
+            const dati = await res.json();
+            document.getElementById('lista').innerHTML = dati.map(s => 
+                `<li class="p-2 border-b flex justify-between">${s.url} <span class="${s.status === 'online' ? 'text-green-500' : 'text-red-500'}">${s.status}</span></li>`
+            ).join('');
         }
 
-        document.getElementById('siteForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const urlPattern = document.getElementById('urlPattern').value;
-            await fetch('/api/sites', {
+        async function aggiungiSito() {
+            const url = document.getElementById('nuovo').value;
+            const res = await fetch('/api/sites', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, urlPattern })
+                body: JSON.stringify({ url })
             });
-            e.target.reset();
-            fetchSites();
-        };
+            if (res.ok) {
+                document.getElementById('nuovo').value = "";
+                caricaSiti();
+            } else {
+                alert("URL non valido");
+            }
+        }
 
-        fetchSites();
+        window.onload = caricaSiti;
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 text-gray-800">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Gestione Siti Streaming</h1>
+        <div class="flex mb-4 gap-2">
+            <input id="nuovo" class="flex-1 border px-3 py-2 rounded" placeholder="https://sito.com/search?q={query}" />
+            <button onclick="aggiungiSito()" class="bg-blue-600 text-white px-4 py-2 rounded">Aggiungi</button>
+        </div>
+        <ul id="lista" class="divide-y"></ul>
+    </div>
 </body>
 </html>

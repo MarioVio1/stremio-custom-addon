@@ -1,17 +1,17 @@
 {
-  "name": "stremio-search-addon",
+  "name": "stremio-full-addon",
   "version": "1.0.0",
-  "description": "Addon Stremio che cerca film/serie in una lista di siti (come Veezie)",
+  "description": "Addon Stremio con UI web, controllo siti, ricerca automatica via TMDB e proxy",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "body-parser": "^1.20.2",
     "axios": "^1.6.0",
-    "stremio-addon-sdk": "^1.3.1",
+    "body-parser": "^1.20.2",
     "cheerio": "^1.0.0-rc.12",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "stremio-addon-sdk": "^1.3.1"
   }
 }
